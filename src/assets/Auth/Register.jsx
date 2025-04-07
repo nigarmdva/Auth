@@ -19,12 +19,12 @@ const Register = () => {
         }
 
         try {
-            const response = await axiosFunction("POST", "register", userData)
+            const response = await axiosFunction("POST", "api/register", userData)
           
             localStorage.setItem("token", response.token)
             localStorage.setItem("user", JSON.stringify(response.user))
 
-            window.location.href = "/user";
+            // window.location.href = "/user";
            
             useAuth.getState().setUser(response.user)  
             console.log("Updated user:", response.user)

@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "https://expense-tracker-api-u87b.onrender.com/api";
+const baseURL = "https://expense-tracker-api-u87b.onrender.com";
 
 export const axiosFunction = async (method, endpoint, data) => {
   try {
@@ -7,6 +7,7 @@ export const axiosFunction = async (method, endpoint, data) => {
       method,
       url: `${baseURL}/${endpoint}`,
       data: data && data,
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
       }

@@ -10,12 +10,13 @@ const Login = () => {
         e.preventDefault();
         const userData={email, password};
         try {
-            const response = await axiosFunction("POST", "login", userData);
+            const request= await axiosFunction("GET", "sanctum/csrf-cookie", {});
+            const response = await axiosFunction("POST", "api/login", userData);
             console.log("Invalid response structure:", response);
             
             if(response && response.token){
                 localStorage.setItem("token", response.token);
-                const userResponse = await axiosFunction("GET", "user", {}, {
+                const userResponse = await axiosFunction("GET", "api/user", {}, {
                     Authorization: `Bearer ${response.token}`
                 });   
 
