@@ -5,7 +5,7 @@ import UserProfile from "../components/UserProfile";
 export const Router = createBrowserRouter([
    
     {
-      path:"/",
+      path:"/register",
       element:<Register/>
     },
     {

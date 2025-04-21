@@ -1,43 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { axiosFunction } from '../axios';
-import useAuth from '../store/auth';
-
+import useAuthStore from '../store/auth';
 const Login = () => {
+    const navigate= useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useAuthStore();
 
     const handleSubmit =async (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         const userData={email, password};
         try {
-            const request= await axiosFunction("GET", "sanctum/csrf-cookie", {});
+            await axiosFunction("GET", "sanctum/csrf-cookie", {});
             const response = await axiosFunction("POST", "api/login", userData);
-            console.log("Invalid response structure:", response);
-            
-            if(response && response.token){
-                localStorage.setItem("token", response.token);
-                const userResponse = await axiosFunction("GET", "api/user", {}, {
-                    Authorization: `Bearer ${response.token}`
-                });   
-
-                if(response && response.user){
-                    localStorage.setItem("user", JSON.stringify(response.user));
-                    useAuth.getState().setUser(response.user);
-                    console.log("Updated user:", response.user)
-                }
-                else {
-                    console.error("User data not found:", userResponse);
-                }
-                
-                window.location.href = "/user";
-                
-            }
-            else{
-                console.error("Invalid response structure:", response);
-
-            }
+            console.log( "Login response",response);
+            login(response.user, response.token);
+            navigate("/user");
         } catch (error) {
-            console.log(error);
+            console.log(error.response?.data);
         }
         
     }

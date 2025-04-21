@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { axiosFunction } from '../axios'
-import useAuth from '../store/auth'
+import useAuthStore from '../store/auth'
 
 const Register = () => {
-    const user = useAuth((state) => state.user)  
+    const { login } = useAuthStore();
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -19,17 +19,15 @@ const Register = () => {
         }
 
         try {
+            await axiosFunction("GET", "sanctum/csrf-cookie", {});
             const response = await axiosFunction("POST", "api/register", userData)
-          
-            localStorage.setItem("token", response.token)
-            localStorage.setItem("user", JSON.stringify(response.user))
-
-            // window.location.href = "/user";
            
-            useAuth.getState().setUser(response.user)  
-            console.log("Updated user:", response.user)
+            const user = response.user;
+            const token = response.token;
+            console.log("Updated user:", user)
+            login(user,token);  
         } catch (error) {
-            console.log(error)
+            console.log(error.response?.data);
         }
     }
 

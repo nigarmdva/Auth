@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseURL = "https://expense-tracker-api-u87b.onrender.com";
+import Cookies from "js-cookie";
+const baseURL = "http://localhost:8000";
 
 export const axiosFunction = async (method, endpoint, data) => {
   try {
@@ -10,10 +11,9 @@ export const axiosFunction = async (method, endpoint, data) => {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
+        'X-XSRF-TOKEN': Cookies.get("XSRF-TOKEN")
       }
     });
-
-    console.log(response.data);
 
     return response.data; 
   } catch (err) {
